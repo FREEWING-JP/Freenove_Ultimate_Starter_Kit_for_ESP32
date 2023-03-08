@@ -1,3 +1,6 @@
+// ThingPulse / esp8266-oled-ssd1306
+// https://github.com/ThingPulse/esp8266-oled-ssd1306/blob/master/examples/SSD1306DrawingDemo/SSD1306DrawingDemo.ino
+
 /**
    The MIT License (MIT)
 
@@ -62,8 +65,24 @@
 // SH1106Brzo  display(0x3c, D3, D5);
 
 // Initialize the OLED display using Wire library
-SSD1306Wire display(0x3c, SDA, SCL);   // ADDRESS, SDA, SCL  -  SDA and SCL usually populate automatically based on your board's pins_arduino.h e.g. https://github.com/esp8266/Arduino/blob/master/variants/nodemcu/pins_arduino.h
+// SSD1306Wire display(0x3c, SDA, SCL);   // ADDRESS, SDA, SCL  -  SDA and SCL usually populate automatically based on your board's pins_arduino.h e.g. https://github.com/esp8266/Arduino/blob/master/variants/nodemcu/pins_arduino.h
 // SH1106Wire display(0x3c, SDA, SCL);
+
+// Freenove ESP32-WROVER CAM board
+// https://www.amazon.co.jp/dp/B09BC1N9LL/ref=nosim?tag=freewing-22
+// 0.96 inch OLED Display SSD1306 3.3V 128x64 I2C Interface
+// https://www.amazon.co.jp/dp/B081ZQ5Z97/ref=nosim?tag=freewing-22
+//  OLED - ESP32
+//  GND  - GND
+//  VCC  - +3.3V
+//  SCL  - GPIO 13
+//  SDA  - GPIO 14
+
+#define I2C_ADRS 0x3c
+#define I2C_SCL 13
+#define I2C_SDA 14
+
+SSD1306Wire display(I2C_ADRS, I2C_SDA, I2C_SCL);
 
 // Adapted from Adafruit_SSD1306
 void drawLines() {
@@ -205,29 +224,44 @@ void printBuffer(void) {
 void setup() {
   display.init();
 
-  // display.flipScreenVertically();
+  display.flipScreenVertically();
 
   display.setContrast(255);
 
-  drawLines();
-  delay(1000);
-  display.clear();
+  while (1) {
+    display.setColor(WHITE);
+    display.fillRect(0, 0, display.getWidth(), display.getHeight());
+    display.display();
+    delay(1000);
+    display.clear();
 
-  drawRect();
-  delay(1000);
-  display.clear();
+    display.setColor(BLACK);
+    display.fillRect(0, 0, display.getWidth(), display.getHeight());
+    display.display();
+    delay(1000);
+    display.clear();
 
-  fillRect();
-  delay(1000);
-  display.clear();
+    display.setColor(WHITE);
+    drawLines();
+    delay(1000);
+    display.clear();
 
-  drawCircle();
-  delay(1000);
-  display.clear();
+    drawRect();
+    delay(1000);
+    display.clear();
 
-  printBuffer();
-  delay(1000);
-  display.clear();
+    fillRect();
+    delay(1000);
+    display.clear();
+
+    drawCircle();
+    delay(1000);
+    display.clear();
+
+    printBuffer();
+    delay(1000);
+    display.clear();
+  }
 }
 
 void loop() { }
