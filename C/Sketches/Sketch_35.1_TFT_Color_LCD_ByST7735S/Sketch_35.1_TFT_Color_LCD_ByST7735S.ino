@@ -1,3 +1,6 @@
+// moononournation / Arduino_GFX
+// https://github.com/moononournation/Arduino_GFX/blob/master/examples/HelloWorld/HelloWorld.ino
+
 /*******************************************************************************
  * Start of Arduino_GFX setting
  * 
@@ -20,7 +23,22 @@
  ******************************************************************************/
 #include <Arduino_GFX_Library.h>
 
-#define GFX_BL DF_GFX_BL // default backlight pin, you may replace DF_GFX_BL to actual backlight pin
+// Freenove ESP32-WROVER CAM board ON BOARD LED GPIO 2
+#define GFX_BL 2 // default backlight pin, you may replace DF_GFX_BL to actual backlight pin
+
+// Freenove ESP32-WROVER CAM board
+// https://www.amazon.co.jp/dp/B09BC1N9LL/ref=nosim?tag=freewing-22
+// 0.96 inch TFT Display IPS LCD ST7735S 3.3V 160x80 SPI Interface
+// https://www.amazon.co.jp/dp/B07S728JV4/ref=nosim?tag=freewing-22
+//  LCD - ESP32
+//  GND - GND
+//  VCC - +3.3V
+//  SCL - GPIO 13
+//  SDA - GPIO 14
+//  RES - GPIO 0
+//  DC  - GPIO 12
+//  CS  - GPIO 15
+//  BLK/LED - GPIO 2
 
 /* More dev device declaration: https://github.com/moononournation/Arduino_GFX/wiki/Dev-Device-Declaration */
 #if defined(DISPLAY_DEV_KIT)
@@ -28,10 +46,29 @@ Arduino_GFX *gfx = create_default_Arduino_GFX();
 #else /* !defined(DISPLAY_DEV_KIT) */
 
 /* More data bus class: https://github.com/moononournation/Arduino_GFX/wiki/Data-Bus-Class */
-Arduino_DataBus *bus = create_default_Arduino_DataBus();
+// Arduino_DataBus *bus = create_default_Arduino_DataBus();
+// ESP32 - SPI
+// https://github.com/moononournation/Arduino_GFX/wiki/Data-Bus-Class#esp32
+Arduino_DataBus *bus = new Arduino_ESP32SPI(
+  12 /* DC */, 
+  15 /* CS */,
+  13 /* SCK */,
+  14 /* MOSI */,
+  GFX_NOT_DEFINED /* MISO */,
+  VSPI /* spi_num */);
 
 /* More display class: https://github.com/moononournation/Arduino_GFX/wiki/Display-Class */
-Arduino_GFX *gfx = new Arduino_ILI9341(bus, DF_GFX_RST, 0 /* rotation */, false /* IPS */);
+// Arduino_GFX *gfx = new Arduino_ILI9341(bus, DF_GFX_RST, 0 /* rotation */, false /* IPS */);
+// ST7735 LCD - 0.96" IPS LCD 80x160
+// https://github.com/moononournation/Arduino_GFX/wiki/Display-Class#st7735-lcd
+Arduino_GFX *gfx = new Arduino_ST7735(
+  bus,
+  0 /* RST */,
+  3 /* rotation */,
+  true /* IPS */,
+  80 /* width */, 160 /* height */,
+  26 /* col offset 1 */, 1 /* row offset 1 */,
+  26 /* col offset 2 */, 1 /* row offset 2 */);
 
 #endif /* !defined(DISPLAY_DEV_KIT) */
 /*******************************************************************************
@@ -41,7 +78,18 @@ Arduino_GFX *gfx = new Arduino_ILI9341(bus, DF_GFX_RST, 0 /* rotation */, false 
 void setup(void)
 {
     gfx->begin();
+    delay(1000); // 1 seconds
+    gfx->fillScreen(RED);
+    delay(1000); // 1 seconds
+    gfx->fillScreen(GREEN);
+    delay(1000); // 1 seconds
+    gfx->fillScreen(BLUE);
+    delay(1000); // 1 seconds
+    gfx->fillScreen(WHITE);
+    delay(1000); // 1 seconds
+
     gfx->fillScreen(BLACK);
+    delay(1000); // 1 seconds
 
 #ifdef GFX_BL
     pinMode(GFX_BL, OUTPUT);
@@ -62,5 +110,5 @@ void loop()
     gfx->setTextSize(random(6) /* x scale */, random(6) /* y scale */, random(2) /* pixel_margin */);
     gfx->println("Hello World!");
 
-    delay(1000); // 1 second
+    delay(200); // 0.2 second
 }
