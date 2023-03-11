@@ -51,7 +51,7 @@ Arduino_GFX *gfx = create_default_Arduino_GFX();
 // https://github.com/moononournation/Arduino_GFX/wiki/Data-Bus-Class#esp32
 Arduino_DataBus *bus = new Arduino_ESP32SPI(
   12 /* DC */, 
-  15 /* CS */,
+  GFX_NOT_DEFINED /* CS */,
   13 /* SCK */,
   14 /* MOSI */,
   GFX_NOT_DEFINED /* MISO */,
@@ -63,7 +63,7 @@ Arduino_DataBus *bus = new Arduino_ESP32SPI(
 // https://github.com/moononournation/Arduino_GFX/wiki/Display-Class#st7735-lcd
 Arduino_GFX *gfx = new Arduino_ST7735(
   bus,
-  0 /* RST */,
+  15 /* RST */,
   3 /* rotation */,
   true /* IPS */,
   80 /* width */, 160 /* height */,
