@@ -28,4 +28,10 @@ SSD1306Wire display(I2C_ADRS, I2C_SDA, I2C_SCL);
 ```
 
 * Breadboard Wiring  
-![Sketch_34.1_OLED_BySSD1306.png](https://user-images.githubusercontent.com/16265606/223709216-c1189012-0bbb-4b8e-80dd-95b276f5cae7.png)
+![Sketch_34.1_OLED_BySSD1306.png](https://user-images.githubusercontent.com/16265606/223709216-c1189012-0bbb-4b8e-80dd-95b276f5cae7.png)  
+
+* SH1106 OLED  
+If You want to Use SH1106 .  
+#include "SSD1306Wire.h"  
+ Change to  
+#include "SSD1306Wire.h"  
